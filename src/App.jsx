@@ -1,10 +1,12 @@
-import './App.css'
+import './App.css';
+import Pokedex from './components/pokedex/Pokedex';
 
 function App() {
-
   return (
-    <p>coucou ca marche</p>
-  )
+    <div className="App">
+      <Pokedex />
+    </div>
+  );
 }
 
-export default App
+export default App;
