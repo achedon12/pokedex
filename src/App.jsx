@@ -5,7 +5,7 @@ function App() {
   return (
     <>
         <header>
-            <p style="color: black;">coucou</p>
+            <p>coucou</p>
         </header>
     </>
   )
