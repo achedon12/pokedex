@@ -3,11 +3,7 @@ import './App.css'
 function App() {
 
   return (
-    <>
-        <header>
-            <p>coucou</p>
-        </header>
-    </>
+    <p>coucou ca marche</p>
   )
 }
 
