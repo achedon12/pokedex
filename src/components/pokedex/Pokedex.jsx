@@ -1,12 +1,15 @@
-// src/components/pokedex/Pokedex.jsx
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Card from './Card';
 import Loader from '../PokeLoader';
+import Popup from "../Popup.jsx";
+import PokemonCard from "./PokemonCard.jsx";
 
 const Pokedex = () => {
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [popupIsOpen, setPopupIsOpen] = useState(false);
+  const [popupContent, setPopupContent] = useState({});
 
   useEffect(async () => {
     const fetchPokemons = async () => {
@@ -20,6 +23,8 @@ const Pokedex = () => {
         const evolutionResponse = await axios.get(evolutionChainUrl);
         const evolutions = await getEvolutions(evolutionResponse.data.chain);
 
+        const moves = result.data.moves.map(move => move.move.name);
+
         return {
           name: result.data.name,
           image: result.data.sprites.front_default,
@@ -29,6 +34,7 @@ const Pokedex = () => {
           attack: result.data.stats[1].base_stat,
           defense: result.data.stats[2].base_stat,
           evolutions,
+          moves,
         };
       }));
 
@@ -54,6 +60,7 @@ const Pokedex = () => {
         hp: pokemonResponse.data.stats[0].base_stat,
         attack: pokemonResponse.data.stats[1].base_stat,
         defense: pokemonResponse.data.stats[2].base_stat,
+        abilities: pokemonResponse.data.abilities
       });
       current = current.evolves_to[0];
     }
@@ -61,21 +68,27 @@ const Pokedex = () => {
     return evolutions;
   };
 
+  const onClosePopup = () => {
+    setPopupIsOpen(false);
+  };
+
+  const onOpenPopup = (pokemon) => () => {
+    setPopupIsOpen(true);
+    setPopupContent(pokemon);
+  }
+
   return (
-    <div className="pokedex">
+    <div className="flex flex-wrap justify-center gap-4">
       {loading ? <Loader /> : pokemons.map(pokemon => (
         <Card
           key={pokemon.name}
-          name={pokemon.name}
-          image={pokemon.image}
-          shinyImage={pokemon.shinyImage}
-          type={pokemon.type}
-          hp={pokemon.hp}
-          attack={pokemon.attack}
-          defense={pokemon.defense}
-          evolutions={pokemon.evolutions}
+          pokemon={pokemon}
+          onShow={onOpenPopup(pokemon)}
         />
       ))}
+      <Popup isOpen={popupIsOpen} onClose={onClosePopup}>
+        <PokemonCard pokemon={popupContent} />
+      </Popup>
     </div>
   );
 }
