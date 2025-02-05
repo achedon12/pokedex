@@ -9,7 +9,7 @@ const Pokedex = () => {
   const [pokemons, setPokemons] = useState([]);
   const [loading, setLoading] = useState(true);
   const [popupIsOpen, setPopupIsOpen] = useState(false);
-  const [popupContent, setPopupContent] = useState({});
+  const [popupContent, setPopupContent] = useState(null);
 
   useEffect(async () => {
     const fetchPokemons = async () => {
@@ -87,7 +87,7 @@ const Pokedex = () => {
         />
       ))}
       <Popup isOpen={popupIsOpen} onClose={onClosePopup}>
-        <PokemonCard pokemon={popupContent} />
+        {popupContent && (<PokemonCard pokemon={popupContent} />)}
       </Popup>
     </div>
   );

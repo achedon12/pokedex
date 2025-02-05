@@ -31,7 +31,7 @@ const Popup = ({ onClose, isOpen, showBackground = false, showCloseButton = fals
     >
       <div
         ref={popupRef}
-        className={`p-4 rounded-lg shadow-lg w-auto h-auto relative bg-gray-900 text-white overflow-y-auto bg-opacity-90 backdrop-filter backdrop-blur-lg ${showBackground ? 'bg-opacity-90' : 'bg-opacity-0'}`}
+        className={`p-4 rounded-lg shadow-lg w-auto h-auto relative  text-white overflow-y-auto  ${showBackground ? 'backdrop-blur-lg bg-gray-900 backdrop-filter bg-opacity-90' : 'bg-opacity-0'}`}
       >
         {showCloseButton && (
           <button
