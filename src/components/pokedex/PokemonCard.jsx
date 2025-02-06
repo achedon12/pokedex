@@ -23,29 +23,54 @@ const PokemonCard = ({ pokemon }) => {
     if (!pokemon && !headerColor) return null;
 
     return (
-        <div className="relative border-2 border-gray-300 rounded-lg p-2 w-72 bg-gray-300 shadow-lg">
-            <div className="relative border-2 border-gray-900 bg-gray-900 h-96 pokemon-card">
-                <header className="relative flex flex-row pl-14 pr-4 justify-between align-middle text-align-center text-white"
-                        style={{ backgroundColor: headerColor }}>
-                    <aside className="absolute flex flex-col -left-2.5 top-0 p-2 gap-0.5">
-                        <span className="text-xs text-gray-500 bg-gray-300 border-2 border-gray-400 p-0.5 octogone">
-                            {pokemon.previousEvolution.index === 1 ? 'Base' : `STAGE ${pokemon.previousEvolution.index - 1}`}
-                        </span>
-                        {pokemon.previousEvolution.index !== 1 && (
-                            <div className="relative p-0.5 border-2 border-gray-400 bg-gray-300 octogone">
-                                <div className="border-2 border-gray-400 octogone">
-                                    <img src={pokemon.previousEvolution.image} alt={pokemon.previousEvolution.name} className="w-auto h-8 ml-auto mr-auto" />
+        <div className="relative border-2 border-gray-300 rounded-lg p-1 w-72 h-96 bg-gray-300 shadow-lg">
+            <div className="octogone bg-black p-1 w-full h-full">
+                <div className="octogone h-full w-full bg-gray-300">
+                    <header className="w-full h-10 flex items-center justify-center" style={{ backgroundColor: headerColor }}>
+                        <div className="flex flex-row text-white justify-between items-center gap-2">
+                            <span>{pokemon.name}</span>
+                            <div className="relative flex flex-row text-white text-lg">
+                                <div className="flex flex-row font-bold">
+                                    <span className="text-xs self-end">HP </span>
+                                    {pokemon.hp}
+                                </div>
+                                <div className="w-6 h-6 p-0.5 self-end text-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                    <img
+                                        src={`/pokedex/images/pokedex/pokemon/types/${pokemon.type.toLowerCase()}.svg`}
+                                        alt={pokemon.type}
+                                        className="w-full h-auto top-0 -right-5"
+                                        title={pokemon.type}
+                                    />
                                 </div>
                             </div>
-                        )}
-                    </aside>
-                    <p>{pokemon.name}</p>
-                    <p className="relative text-white text-lg">
-                        <span className="text-xs">HP </span>
-                        {pokemon.hp}
-                        <img src={`/pokedex/images/pokedex/pokemon/types/${pokemon.type.toLowerCase()}.svg`} alt={pokemon.type} className="w-6 h-6 absolute top-0 -right-5" title={pokemon.type} />
-                    </p>
-                </header>
+                        </div>
+                    </header>
+                    <div className="relative h-[90%] p-0 m-0">
+                        <div className="absolute top-0 left-0 w-full h-full">
+                            <img src={pokemon.image} alt={pokemon.name} className="w-[80%] h-[80%] ml-auto mr-auto" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="absolute flex flex-col -left-0 top-6 p-2 gap-0.5">
+                <div className="relative p-0.5 bg-gray-400 octogone">
+                    <div className="bg-gray-300 octogone">
+                        <span className="text-xs p-1 text-gray-500">
+                            {pokemon.previousEvolution.index === 1 ? 'Base' : `STAGE ${pokemon.previousEvolution.index - 1}`}
+                        </span>
+                    </div>
+                </div>
+                {pokemon.previousEvolution.index !== 1 && (
+                    <div className="relative p-0.5 bg-gray-400 octogone">
+                        <div className="bg-gray-300 octogone">
+                            <img
+                                src={pokemon.previousEvolution.image}
+                                alt={pokemon.previousEvolution.name}
+                                className="w-auto h-8 ml-auto mr-auto"
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
