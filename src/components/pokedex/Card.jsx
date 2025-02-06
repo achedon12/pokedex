@@ -9,10 +9,11 @@ const Card = ({ pokemon, onShow}) => {
       image: pokemon.image,
       shinyImage: pokemon.shinyImage,
       types: pokemon.types,
-      hp: pokemon.hp,
-      attack: pokemon.attack,
-      defense: pokemon.defense,
-      //abilities: pokemon.abilities,
+      stats: pokemon.stats,
+      weight: pokemon.weight,
+      height: pokemon.height,
+      cries: pokemon.cries,
+      abilities: pokemon.abilities,
   });
 
   const handleEvolutionChange = (evolution) => {
@@ -21,10 +22,11 @@ const Card = ({ pokemon, onShow}) => {
       image: evolution.image,
       shinyImage: evolution.shinyImage,
       types: evolution.types,
-      hp: evolution.hp,
-      attack: evolution.attack,
-      defense: evolution.defense,
-      //abilities: evolution.abilities,
+      stats: evolution.stats,
+      abilities: evolution.abilities,
+      weight: pokemon.weight,
+      height: pokemon.height,
+      cries: pokemon.cries,
     });
   };
 
@@ -43,21 +45,7 @@ const Card = ({ pokemon, onShow}) => {
         alt={currentEvolution.name}
         className="w-[100%] h-auto"
       />
-      <h2 className="text-2xl m-1">{currentEvolution.name}</h2>
-      <section className="flex flex-row justify-center space-x-2 m-2">
-        <article className="flex flex-col">
-          <img src={`/pokedex/images/pokedex/pokemon/heart.svg`} alt="HP" className="w-6 h-6 ml-auto mr-auto" title="HP" />
-          <p className="text-lg">{currentEvolution.hp}</p>
-        </article>
-        <article className="flex flex-col">
-          <img src={`/pokedex/images/pokedex/pokemon/attack.svg`} alt="Attack" className="w-6 h-6 ml-auto mr-auto" title="Attack" />
-          <p className="text-lg">{currentEvolution.attack}</p>
-        </article>
-        <article className="flex flex-col">
-          <img src={`/pokedex/images/pokedex/pokemon/defense.svg`} alt="Defense" className="w-6 h-6 ml-auto mr-auto" title="Defense" />
-          <p className="text-lg">{currentEvolution.defense}</p>
-        </article>
-      </section>
+      <p className="text-xl m-1 uppercase">{currentEvolution.name}</p>
       <section className="absolute top-1 right-1 flex flex-col items-center justify-center gap-1">
         {currentEvolution.types.map((type) => (
             <article
@@ -111,28 +99,32 @@ Card.propTypes = {
     image: PropTypes.string.isRequired,
     shinyImage: PropTypes.string.isRequired,
     types: PropTypes.arrayOf(PropTypes.string).isRequired,
-    hp: PropTypes.number.isRequired,
-    attack: PropTypes.number.isRequired,
-    defense: PropTypes.number.isRequired,
+    stats: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      value: PropTypes.number.isRequired,
+      color: PropTypes.string.isRequired,
+    })),
+    weight: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    cries: PropTypes.shape({
+      latest: PropTypes.string.isRequired,
+      legacy: PropTypes.string.isRequired,
+    }).isRequired,
+    abilities: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      effect: PropTypes.string,
+    })).isRequired,
     evolutions: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       image: PropTypes.string.isRequired,
       shinyImage: PropTypes.string.isRequired,
       types: PropTypes.arrayOf(PropTypes.string).isRequired,
-      hp: PropTypes.number.isRequired,
-      attack: PropTypes.number.isRequired,
-      defense: PropTypes.number.isRequired,
-      /*abilities: PropTypes.arrayOf(PropTypes.shape({
+      stats: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string.isRequired,
-        description: PropTypes.string.isRequired,
-        pp: PropTypes.number.isRequired,
-      })).isRequired,*/
-    })).isRequired,
-    /*abilities: PropTypes.arrayOf(PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      description: PropTypes.string.isRequired,
-      pp: PropTypes.number.isRequired
-    })).isRequired,*/
+        value: PropTypes.number.isRequired,
+        color: PropTypes.string.isRequired,
+      })).isRequired
+    })).isRequired
   }),
   onShow: PropTypes.func,
 };
