@@ -8,7 +8,7 @@ const Card = ({ pokemon, onShow}) => {
       name: pokemon.name,
       image: pokemon.image,
       shinyImage: pokemon.shinyImage,
-      type: pokemon.type,
+      types: pokemon.types,
       hp: pokemon.hp,
       attack: pokemon.attack,
       defense: pokemon.defense,
@@ -20,7 +20,7 @@ const Card = ({ pokemon, onShow}) => {
       name: evolution.name,
       image: evolution.image,
       shinyImage: evolution.shinyImage,
-      type: evolution.type,
+      types: evolution.types,
       hp: evolution.hp,
       attack: evolution.attack,
       defense: evolution.defense,
@@ -33,7 +33,7 @@ const Card = ({ pokemon, onShow}) => {
   return (
     <div className="relative border-2 border-gray-300 rounded-lg p-4 text-center w-64">
       <button
-        className={`absolute top-2 right-2 bg-${isShiny ? 'yellow-500' : 'red-500'} text-white px-4 py-2 rounded-full transition-all transform hover:scale-105 shadow-lg`}
+        className={`absolute top-1 left-1 bg-${isShiny ? 'yellow-500' : 'red-500'} text-white px-4 py-2 rounded-full transition-all transform hover:scale-105 shadow-lg`}
         onClick={() => setIsShiny(!isShiny)}
       >
         {isShiny ? '🌟' : '⭐'}
@@ -44,18 +44,6 @@ const Card = ({ pokemon, onShow}) => {
         className="w-[100%] h-auto"
       />
       <h2 className="text-2xl m-1">{currentEvolution.name}</h2>
-      <div
-        className="pokemon-type w-6 h-6"
-        style={{ boxShadow: `0 0 20px var(--${currentEvolution.type.toLowerCase()})` }}
-        >
-        <img
-            src={`/pokedex/images/pokedex/pokemon/types/${pokemon.type.toLowerCase()}.svg`}
-            alt={pokemon.type}
-            className={`bg-${pokemon.type.toLowerCase()} rounded-full`}
-            title={pokemon.type}
-        />
-      </div>
-      {/*<img src={`/pokedex/images/pokedex/pokemon/types/${currentEvolution.type.toLowerCase()}.svg`} alt={currentEvolution.type} className="w-6 h-6 ml-auto mr-auto" title={currentEvolution.type} />*/}
       <section className="flex flex-row justify-center space-x-2 m-2">
         <article className="flex flex-col">
           <img src={`/pokedex/images/pokedex/pokemon/heart.svg`} alt="HP" className="w-6 h-6 ml-auto mr-auto" title="HP" />
@@ -70,7 +58,24 @@ const Card = ({ pokemon, onShow}) => {
           <p className="text-lg">{currentEvolution.defense}</p>
         </article>
       </section>
-      <ul className="flex justify-center space-x-2 m-2">
+      <section className="absolute top-1 right-1 flex flex-col items-center justify-center gap-1">
+        {currentEvolution.types.map((type) => (
+            <article
+                key={type}
+                className="pokemon-type w-6 h-6 rounded-full"
+                style={{ boxShadow: `0 0 20px var(--${type.toLowerCase()})` }}
+            >
+                <img
+                    src={`/pokedex/images/pokedex/pokemon/types/${type.toLowerCase()}.svg`}
+                    alt={type}
+                    className="rounded-full p-1"
+                    title={type}
+                    style={{ backgroundColor: `var(--${type.toLowerCase()})` }}
+                />
+            </article>
+        ))}
+        </section>
+        <ul className="flex justify-center space-x-2 m-2">
         {pokemon.evolutions.map((evolution) => (
           <li
             key={evolution.name}
@@ -105,7 +110,7 @@ Card.propTypes = {
     name: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     shinyImage: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
+    types: PropTypes.arrayOf(PropTypes.string).isRequired,
     hp: PropTypes.number.isRequired,
     attack: PropTypes.number.isRequired,
     defense: PropTypes.number.isRequired,
@@ -113,7 +118,7 @@ Card.propTypes = {
       name: PropTypes.string.isRequired,
       image: PropTypes.string.isRequired,
       shinyImage: PropTypes.string.isRequired,
-      type: PropTypes.string.isRequired,
+      types: PropTypes.arrayOf(PropTypes.string).isRequired,
       hp: PropTypes.number.isRequired,
       attack: PropTypes.number.isRequired,
       defense: PropTypes.number.isRequired,

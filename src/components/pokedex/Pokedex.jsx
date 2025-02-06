@@ -29,7 +29,7 @@ const Pokedex = () => {
           name: result.data.name,
           image: result.data.sprites.front_default,
           shinyImage: result.data.sprites.front_shiny,
-          type: result.data.types[0].type.name,
+          types: result.data.types.map(type => type.type.name),
           hp: result.data.stats[0].base_stat,
           attack: result.data.stats[1].base_stat,
           defense: result.data.stats[2].base_stat,
@@ -52,15 +52,17 @@ const Pokedex = () => {
 
     while (current) {
       const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${current.species.name}`);
+      console.log(pokemonResponse.data);
       evolutions.push({
         name: current.species.name,
         image: pokemonResponse.data.sprites.front_default,
         shinyImage: pokemonResponse.data.sprites.front_shiny,
-        type: pokemonResponse.data.types[0].type.name,
+        types: pokemonResponse.data.types.map(type => type.type.name),
         hp: pokemonResponse.data.stats[0].base_stat,
         attack: pokemonResponse.data.stats[1].base_stat,
         defense: pokemonResponse.data.stats[2].base_stat,
-        //abilities: pokemonResponse.data.abilities
+        abilities: pokemonResponse.data.abilities,
+
       });
       current = current.evolves_to[0];
     }
