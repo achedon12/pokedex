@@ -23,7 +23,7 @@ const Popup = ({ onClose, isOpen, showBackground = false, showCloseButton = fals
       window.removeEventListener('keydown', handleEsc);
       window.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]);
+  }, [isOpen, onClose]);
 
   return (
     <div

@@ -11,7 +11,7 @@ const Pokedex = () => {
   const [popupIsOpen, setPopupIsOpen] = useState(false);
   const [popupContent, setPopupContent] = useState(null);
 
-  useEffect(async () => {
+  useEffect(() => {
     const fetchPokemons = async () => {
       const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151');
       const fetches = response.data.results.map(pokemon => axios.get(pokemon.url));
@@ -43,7 +43,7 @@ const Pokedex = () => {
       setLoading(false);
     };
 
-    await fetchPokemons();
+    fetchPokemons();
   }, []);
 
   const getEvolutions = async (chain) => {
@@ -60,7 +60,7 @@ const Pokedex = () => {
         hp: pokemonResponse.data.stats[0].base_stat,
         attack: pokemonResponse.data.stats[1].base_stat,
         defense: pokemonResponse.data.stats[2].base_stat,
-        abilities: pokemonResponse.data.abilities
+        //abilities: pokemonResponse.data.abilities
       });
       current = current.evolves_to[0];
     }
@@ -72,9 +72,9 @@ const Pokedex = () => {
     setPopupIsOpen(false);
   };
 
-  const onOpenPopup = (pokemon) => () => {
-    setPopupIsOpen(true);
+  const onOpenPopup  =  (pokemon) => {
     setPopupContent(pokemon);
+    setPopupIsOpen(true);
   }
 
   return (
@@ -83,7 +83,7 @@ const Pokedex = () => {
         <Card
           key={pokemon.name}
           pokemon={pokemon}
-          onShow={onOpenPopup(pokemon)}
+          onShow={(p) => onOpenPopup(p)}
         />
       ))}
       <Popup isOpen={popupIsOpen} onClose={onClosePopup}>

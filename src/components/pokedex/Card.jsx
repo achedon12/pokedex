@@ -1,7 +1,7 @@
-import {useEffect, useState} from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const Card = ({ pokemon, onShow = () => {} }) => {
+const Card = ({ pokemon, onShow}) => {
 
   const [isShiny, setIsShiny] = useState(false);
   const [currentEvolution, setCurrentEvolution] = useState({
@@ -12,7 +12,7 @@ const Card = ({ pokemon, onShow = () => {} }) => {
       hp: pokemon.hp,
       attack: pokemon.attack,
       defense: pokemon.defense,
-      abilities: pokemon.abilities,
+      //abilities: pokemon.abilities,
   });
 
   const handleEvolutionChange = (evolution) => {
@@ -24,7 +24,7 @@ const Card = ({ pokemon, onShow = () => {} }) => {
       hp: evolution.hp,
       attack: evolution.attack,
       defense: evolution.defense,
-      abilities: evolution.abilities,
+      //abilities: evolution.abilities,
     });
   };
 
@@ -71,10 +71,20 @@ const Card = ({ pokemon, onShow = () => {} }) => {
         ))}
       </ul>
       <button
-          className="m-2"
-          onClick={onShow}
-        >
-          Learn More</button>
+        className="m-2"
+        onClick={() => {
+            // evolution number
+            const previousEvolution = pokemon.evolutions.find(evolution => evolution.name === currentEvolution.name);
+            currentEvolution.previousEvolution = {
+                index: pokemon.evolutions.indexOf(previousEvolution) + 1,
+                image: pokemon.evolutions[pokemon.evolutions.indexOf(previousEvolution) - 1]?.image,
+                name: pokemon.evolutions[pokemon.evolutions.indexOf(previousEvolution) - 1]?.name,
+            };
+            onShow(currentEvolution);
+        }}
+      >
+        Learn More
+      </button>
     </div>
   );
 }
@@ -96,17 +106,17 @@ Card.propTypes = {
       hp: PropTypes.number.isRequired,
       attack: PropTypes.number.isRequired,
       defense: PropTypes.number.isRequired,
-     abilities: PropTypes.arrayOf(PropTypes.shape({
-         name: PropTypes.string.isRequired,
-         description: PropTypes.string.isRequired,
-         pp: PropTypes.number.isRequired,
-     })).isRequired,
+      /*abilities: PropTypes.arrayOf(PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired,
+        pp: PropTypes.number.isRequired,
+      })).isRequired,*/
     })).isRequired,
-    abilities: PropTypes.arrayOf(PropTypes.shape({
+    /*abilities: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string.isRequired,
       description: PropTypes.string.isRequired,
       pp: PropTypes.number.isRequired
-    })).isRequired,
+    })).isRequired,*/
   }),
   onShow: PropTypes.func,
 };
