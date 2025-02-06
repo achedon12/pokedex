@@ -51,6 +51,26 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* pokemon type var */
+  --bug: #92BC2C;
+  --dark: #595761;
+  --dragon: #0C69C8;
+  --electric: #F2D94E;
+  --fire: #FBA54C;
+  --fairy: #EE90E6;
+  --fighting: #D3425F;
+  --flying: #A1BBEC;
+  --ghost: #5F6DBC;
+  --grass: #5FBD58;
+  --ground: #DA7C4D;
+  --ice: #75D0C1;
+  --normal: #A0A29F;
+  --poison: #B763CF;
+  --psychic: #FA8581;
+  --rock: #C9BB8A;
+  --steel: #5695A3;
+  --water: #539DDF;
 }
 
 a {
@@ -105,4 +125,103 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* pokemon icon types */
+.pokemon-type {
+
+  img {
+    /*height: 60%;*/
+    /*width: 60%;*/
+  }
+
+ /* .bug {
+    background: var(--bug);
+    box-shadow: 0 0 20px var(--bug);
+  }
+
+  .dark {
+    background: var(--dark);
+    box-shadow: 0 0 20px var(--dark);
+  }
+
+  .dragon {
+    background: var(--dragon);
+    box-shadow: 0 0 20px var(--dragon);
+  }
+
+  .electric {
+    background: var(--electric);
+    box-shadow: 0 0 20px var(--electric);
+  }
+
+  .fire {
+    background: var(--fire);
+    box-shadow: 0 0 20px var(--fire);
+  }
+
+  .fairy {
+    background: var(--fairy);
+    box-shadow: 0 0 20px var(--fairy);
+  }
+
+  .fighting {
+    background: var(--fighting);
+    box-shadow: 0 0 20px var(--fighting);
+  }
+
+  .flying {
+    background: var(--flying);
+    box-shadow: 0 0 20px var(--flying);
+  }
+
+  .ghost {
+    background: var(--ghost);
+    box-shadow: 0 0 20px var(--ghost);
+  }
+
+  .grass {
+    background: var(--grass);
+    box-shadow: 0 0 20px var(--grass);
+  }
+
+  .ground {
+    background: var(--ground);
+    box-shadow: 0 0 20px var(--ground);
+  }
+
+  .ice {
+    background: var(--ice);
+    box-shadow: 0 0 20px var(--ice);
+  }
+
+  .normal {
+    background: var(--normal);
+    box-shadow: 0 0 20px var(--normal);
+  }
+
+  .poison {
+    background: var(--poison);
+    box-shadow: 0 0 20px var(--poison);
+  }
+
+  .psychic {
+    background: var(--psychic);
+    box-shadow: 0 0 20px var(--psychic);
+  }
+
+  .rock {
+    background: var(--rock);
+    box-shadow: 0 0 20px var(--rock);
+  }
+
+  .steel {
+    background: var(--steel);
+    box-shadow: 0 0 20px var(--steel);
+  }
+
+  .water {
+    background: var(--water);
+    box-shadow: 0 0 20px var(--water);
+  }*/
 }

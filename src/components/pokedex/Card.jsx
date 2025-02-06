@@ -44,7 +44,18 @@ const Card = ({ pokemon, onShow}) => {
         className="w-[100%] h-auto"
       />
       <h2 className="text-2xl m-1">{currentEvolution.name}</h2>
-      <img src={`/pokedex/images/pokedex/pokemon/types/${currentEvolution.type.toLowerCase()}.svg`} alt={currentEvolution.type} className="w-6 h-6 ml-auto mr-auto" title={currentEvolution.type} />
+      <div
+        className="pokemon-type w-6 h-6"
+        style={{ boxShadow: `0 0 20px var(--${currentEvolution.type.toLowerCase()})` }}
+        >
+        <img
+            src={`/pokedex/images/pokedex/pokemon/types/${pokemon.type.toLowerCase()}.svg`}
+            alt={pokemon.type}
+            className={`bg-${pokemon.type.toLowerCase()} rounded-full`}
+            title={pokemon.type}
+        />
+      </div>
+      {/*<img src={`/pokedex/images/pokedex/pokemon/types/${currentEvolution.type.toLowerCase()}.svg`} alt={currentEvolution.type} className="w-6 h-6 ml-auto mr-auto" title={currentEvolution.type} />*/}
       <section className="flex flex-row justify-center space-x-2 m-2">
         <article className="flex flex-col">
           <img src={`/pokedex/images/pokedex/pokemon/heart.svg`} alt="HP" className="w-6 h-6 ml-auto mr-auto" title="HP" />

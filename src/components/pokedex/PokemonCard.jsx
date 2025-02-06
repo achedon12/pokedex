@@ -1,32 +1,15 @@
 import PropTypes from 'prop-types';
-import { useEffect, useState } from 'react';
-import {FastAverageColor} from "fast-average-color";
 
 const PokemonCard = ({ pokemon }) => {
 
-    const [headerColor, setHeaderColor] = useState(null);
 
-    useEffect(() => {
-        if (pokemon && pokemon.image) {
-            const fac = new FastAverageColor();
-            fac.getColorAsync(pokemon.image)
-                .then(color => {
-                    setHeaderColor(color.rgb);
-                })
-                .catch(e => {
-                    console.error(e);
-                });
-            console.log('pokemon', pokemon);
-        }
-    }, [pokemon]);
-
-    if (!pokemon && !headerColor) return null;
+    if (!pokemon) return null;
 
     return (
         <div className="relative border-2 border-gray-300 rounded-lg p-1 w-72 h-96 bg-gray-300 shadow-lg">
             <div className="octogone bg-black p-1 w-full h-full">
                 <div className="octogone h-full w-full bg-gray-300">
-                    <header className="w-full h-10 flex items-center justify-center" style={{ backgroundColor: headerColor }}>
+                    <header className={`w-full h-10 flex items-center justify-center bg-${pokemon.type.toLowerCase()}`}>
                         <div className="flex flex-row text-white justify-between items-center gap-2">
                             <span>{pokemon.name}</span>
                             <div className="relative flex flex-row text-white text-lg">
@@ -34,11 +17,14 @@ const PokemonCard = ({ pokemon }) => {
                                     <span className="text-xs self-end">HP </span>
                                     {pokemon.hp}
                                 </div>
-                                <div className="w-6 h-6 p-0.5 self-end text-center rounded-full" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+                                <div
+                                    className="pokemon-type w-6 h-6"
+                                    style={{ boxShadow: `0 0 20px var(--${pokemon.type.toLowerCase()})` }}
+                                >
                                     <img
                                         src={`/pokedex/images/pokedex/pokemon/types/${pokemon.type.toLowerCase()}.svg`}
                                         alt={pokemon.type}
-                                        className="w-full h-auto top-0 -right-5"
+                                        className={`bg-${pokemon.type.toLowerCase()} rounded-full`}
                                         title={pokemon.type}
                                     />
                                 </div>
