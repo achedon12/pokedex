@@ -10,36 +10,6 @@ on:
       - develop
 
 jobs:
-  pre-deploy:
-    name: Pre-Deploy
-    runs-on: ubuntu-22.04
-    if: github.ref == 'refs/heads/develop'
-
-    # merge manually to main branch
-    steps:
-      - name: Checkout develop branch
-        uses: actions/checkout@v2
-        with:
-          ref: develop
-
-      - name: Configure Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Fetch all branches
-        run: git fetch --all
-
-      - name: Merge develop into main
-        run: |
-          git checkout main
-          git merge develop
-
-      - name: Push changes to main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: git push origin main
-
 
   build:
     name: Build
