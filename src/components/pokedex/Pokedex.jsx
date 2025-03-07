@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Card from './Card';
 import Loader from '../PokeLoader';
@@ -8,24 +8,26 @@ import PokemonCard from "./PokemonCard.jsx";
 const Pokedex = () => {
     const [pokemons, setPokemons] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [popupIsOpen, setPopupIsOpen] = useState(false);
     const [popupContent, setPopupContent] = useState(null);
     const localStorage = window.localStorage;
-    const [limit, setLimit] = useState(20);
-    const [offset, setOffest] = useState(localStorage.getItem('pokemons') ? JSON.parse(localStorage.getItem('pokemons')).length : 0);
+    const limit = useRef(20);
+    const offsetRef = useRef(localStorage.getItem('pokemons') ? JSON.parse(localStorage.getItem('pokemons')).length : 0);
 
     useEffect(() => {
+        setLoading(true);
         if (localStorage.getItem('pokemons')) {
-            setLoading(true);
             setPokemons(JSON.parse(localStorage.getItem('pokemons')));
-            setLoading(false);
         } else {
-            setOffest(0);
+            offsetRef.current = 0;
         }
+        setLoading(false);
 
         const handleScroll = () => {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-                setOffest(offset + limit);
+                offsetRef.current += limit.current;
+                fetchPokemons(offsetRef.current, limit.current);
             }
         };
 
@@ -37,14 +39,14 @@ const Pokedex = () => {
     }, []);
 
     useEffect(() => {
-        fetchPokemons().then(r => r);
-    }, [offset]);
+        fetchPokemons(offsetRef.current, limit.current, offsetRef.current === 0);
+    }, [offsetRef.current]);
 
-    const fetchPokemons = async () => {
-        console.log('fetching pokemons', offset, limit);
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
+    const fetchPokemons = async (fetchOffset, fetchLimit, firstFetch = false) => {
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${fetchLimit}&offset=${fetchOffset}`);
         const fetches = response.data.results.map(pokemon => axios.get(pokemon.url));
         const results = await Promise.all(fetches);
+        firstFetch ? setLoading(true) : setLoadingMore(true);
 
         const pokemonData = await Promise.all(results.map(async result => {
             const speciesResponse = await axios.get(result.data.species.url);
@@ -82,8 +84,9 @@ const Pokedex = () => {
         }));
 
         const basePokemons = pokemonData.filter(pokemon => pokemon.evolutions[0].name === pokemon.name);
-        setPokemons([...pokemons, ...basePokemons]);
+        setPokemons(prevPokemons => [...prevPokemons, ...basePokemons]);
         setLoading(false);
+        setLoadingMore(false);
         const pokemonsFromLocalStorage = JSON.parse(localStorage.getItem('pokemons'));
         if (pokemonsFromLocalStorage) {
             const newPokemons = [...pokemonsFromLocalStorage, ...basePokemons];
@@ -157,6 +160,7 @@ const Pokedex = () => {
                     onShow={(p) => onOpenPopup(p)}
                 />
             ))}
+            {loadingMore && <Loader/>}
             <Popup isOpen={popupIsOpen} onClose={onClosePopup}>
                 {popupContent && (<PokemonCard pokemon={popupContent}/>)}
             </Popup>
