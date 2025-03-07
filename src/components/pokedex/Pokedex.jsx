@@ -160,7 +160,7 @@ const Pokedex = () => {
                     onShow={(p) => onOpenPopup(p)}
                 />
             ))}
-            {loadingMore && <Loader/>}
+            {loadingMore && !loading && <Loader/>}
             <Popup isOpen={popupIsOpen} onClose={onClosePopup}>
                 {popupContent && (<PokemonCard pokemon={popupContent}/>)}
             </Popup>
