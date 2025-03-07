@@ -66,6 +66,8 @@ const Pokedex = () => {
 
     while (current) {
       const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${current.species.name}`);
+
+      const abilities = await getAbilities(pokemonResponse.data.abilities);
       evolutions.push({
         id: pokemonResponse.data.id,
         name: current.species.name,
@@ -86,7 +88,7 @@ const Pokedex = () => {
         },
         weight: pokemonResponse.data.weight,
         height: pokemonResponse.data.height,
-        abilities: pokemonResponse.data.abilities,
+        abilities
       });
       current = current.evolves_to[0];
     }

@@ -1,34 +1,38 @@
 import PropTypes from 'prop-types';
+import {useEffect, useState} from "react";
 
 const PokemonCard = ({ pokemon }) => {
 
+    const [thePokemon, setThePokemon] = useState(pokemon);
 
-    if (!pokemon) return null;
+    useEffect(() => {
+        setThePokemon(pokemon);
+    }, [pokemon]);
 
-    console.log(pokemon);
+    if (!thePokemon) return null;
 
     return (
         <div className="relative border-2 border-gray-300 rounded-lg p-1 w-72 min-h-96 bg-gray-300 shadow-lg">
             <div className="octogone bg-black p-1 w-full min-h-96">
                 <div className="octogone min-h-96 w-full bg-gray-300">
-                    <header className="w-full h-10 flex items-center justify-center" style={{ backgroundColor: `var(--${pokemon.types[0].toLowerCase()})` }}>
-                        <p className="text-white uppercase text-lg">{pokemon.name}</p>
+                    <header className="w-full h-10 flex items-center justify-center" style={{ backgroundColor: `var(--${thePokemon.types[0].toLowerCase()})` }}>
+                        <p className="text-white uppercase text-lg">{thePokemon.name}</p>
                     </header>
-                    <div className="relative min-h-96 h-[90%] p-0 m-0" style={{ backgroundImage: `url(${pokemon.image})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center top', backgroundSize: '70%' }}>
+                    <div className="relative min-h-96 h-[90%] p-0 m-0" style={{ backgroundImage: `url(${thePokemon.image})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center top', backgroundSize: '70%' }}>
                         <div className="absolute flex flex-col left-0.5 top-0.5 gap-0.5">
                             <div className="relative p-0.5 bg-gray-400 octogone">
                                 <div className="bg-gray-300 octogone">
                                     <span className="text-xs p-1 text-gray-500">
-                                        {pokemon.previousEvolution.index === 1 ? 'Base' : `STAGE ${pokemon.previousEvolution.index - 1}`}
+                                        {thePokemon.previousEvolution.index === 1 ? 'Base' : `STAGE ${thePokemon.previousEvolution.index - 1}`}
                                     </span>
                                 </div>
                             </div>
-                            {pokemon.previousEvolution.index !== 1 && (
+                            {thePokemon.previousEvolution.index !== 1 && (
                                 <div className="relative p-0.5 bg-gray-400 octogone">
                                     <div className="bg-gray-300 octogone">
                                         <img
-                                            src={pokemon.previousEvolution.image}
-                                            alt={pokemon.previousEvolution.name}
+                                            src={thePokemon.previousEvolution.image}
+                                            alt={thePokemon.previousEvolution.name}
                                             className="w-auto h-8 ml-auto mr-auto"
                                         />
                                     </div>
@@ -38,7 +42,7 @@ const PokemonCard = ({ pokemon }) => {
 
                         {/* pokemon types */}
                         <section className="absolute top-1 right-1 flex flex-col items-center justify-center gap-1">
-                            {pokemon.types.map((type) => (
+                            {thePokemon.types.map((type) => (
                                 <article
                                     key={type}
                                     className="pokemon-type w-6 h-6 rounded-full"
@@ -59,7 +63,7 @@ const PokemonCard = ({ pokemon }) => {
 
                             {/* pokemon stats */}
                             <ul className="grid grid-cols-3 flex-wrap items-center justify-center gap-0.5">
-                                {pokemon.stats.map((stat, index) => (
+                                {thePokemon.stats.map((stat, index) => (
                                     <li key={index} className="flex flex-row justify-center items-center gap-1 text-xs p-1 font-bold uppercase bg-gray-400 rounded-full">
                                         <span className="flex items-center justify-center rounded-full w-8 h-5" style={{ backgroundColor: stat.color }}>{stat.name}</span>
                                         <span className="text-black">{stat.value}</span>
@@ -71,11 +75,11 @@ const PokemonCard = ({ pokemon }) => {
                             <article className="grid grid-cols-2 w-1/2 ml-auto mr-auto">
                                 <div className="flex flex-col items-center justify-center">
                                     <h4 className="text-xs p-1 uppercase font-bold">Weight</h4>
-                                    <span className="text-xs p-1 text-black bg-gray-400 rounded-lg">{pokemon.weight}Kg</span>
+                                    <span className="text-xs p-1 text-black bg-gray-400 rounded-lg">{thePokemon.weight}Kg</span>
                                 </div>
                                 <div className="flex flex-col items-center justify-center">
                                     <h4 className="text-xs p-1 uppercase font-bold">Height</h4>
-                                    <span className="text-xs p-1 text-black bg-gray-400 rounded-lg">{pokemon.height}m</span>
+                                    <span className="text-xs p-1 text-black bg-gray-400 rounded-lg">{thePokemon.height}m</span>
                                 </div>
                             </article>
 
@@ -83,12 +87,12 @@ const PokemonCard = ({ pokemon }) => {
                             {/*<article className="flex flex-col items-center justify-center gap-1">
                                 <h4 className="text-xs p-1 uppercase">Cries</h4>
                                 <audio
-                                    src={pokemon.cries.latest}
+                                    src={thePokemon.cries.latest}
                                     controls
                                     className="w-1/2"
                                 />
                                 <audio
-                                    src={pokemon.cries.legacy}
+                                    src={thePokemon.cries.legacy}
                                     controls
                                     className="w-1/2"
                                 />
@@ -98,7 +102,7 @@ const PokemonCard = ({ pokemon }) => {
                             <article className="flex flex-col items-center justify-center gap-1">
                                 <h4 className="text-xs p-1 uppercase font-bold">Abilities</h4>
                                 <ul className="flex flex-wrap flex-row items-center justify-center gap-1">
-                                    {pokemon.abilities.map((ability, index) => (
+                                    {thePokemon.abilities.map((ability, index) => (
                                         <li key={index} className="text-xs p-1 text-black bg-gray-400 rounded-lg">{ability.name}</li>
                                     ))}
                                 </ul>
