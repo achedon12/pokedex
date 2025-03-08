@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import axios from 'axios';
 import Card from './Card';
 import Loader from '../PokeLoader';
@@ -12,6 +12,7 @@ const Pokedex = () => {
     const [popupIsOpen, setPopupIsOpen] = useState(false);
     const [popupContent, setPopupContent] = useState(null);
     const localStorage = window.localStorage;
+    const [language, setLanguage] = useState(window.localStorage.getItem('language') || 'en');
     const limit = useRef(20);
     const offsetRef = useRef(localStorage.getItem('pokemons') ? JSON.parse(localStorage.getItem('pokemons')).length : 0);
 
@@ -42,6 +43,12 @@ const Pokedex = () => {
         fetchPokemons(offsetRef.current, limit.current, offsetRef.current === 0);
     }, [offsetRef.current]);
 
+    useEffect(() => {
+        if (language) {
+            localStorage.setItem('language', language);
+        }
+    }, [language]);
+
     const fetchPokemons = async (fetchOffset, fetchLimit, firstFetch = false) => {
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${fetchLimit}&offset=${fetchOffset}`);
         const fetches = response.data.results.map(pokemon => axios.get(pokemon.url));
@@ -54,12 +61,12 @@ const Pokedex = () => {
             const evolutionResponse = await axios.get(evolutionChainUrl);
             const evolutions = await getEvolutions(evolutionResponse.data.chain);
             const abilities = await getAbilities(result.data.abilities);
-
+            const names = await getLanguagesNames(speciesResponse.data.names);
             const moves = result.data.moves.map(move => move.move.name);
 
             return {
                 id: result.data.id,
-                name: result.data.name,
+                names,
                 image: result.data.sprites.front_default,
                 shinyImage: result.data.sprites.front_shiny,
                 types: result.data.types.map(type => type.type.name),
@@ -96,17 +103,25 @@ const Pokedex = () => {
         }
     };
 
+    const getLanguagesNames = async (names) => {
+        return names.map(name => ({
+            name: name.name,
+            language: name.language.name,
+        }));
+    };
+
     const getEvolutions = async (chain) => {
         const evolutions = [];
         let current = chain;
 
         while (current) {
             const pokemonResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${current.species.name}`);
-
+            const speciesResponse = await axios.get(pokemonResponse.data.species.url);
             const abilities = await getAbilities(pokemonResponse.data.abilities);
+            const names = await getLanguagesNames(speciesResponse.data.names);
             evolutions.push({
                 id: pokemonResponse.data.id,
-                name: current.species.name,
+                names,
                 image: pokemonResponse.data.sprites.front_default,
                 shinyImage: pokemonResponse.data.sprites.front_shiny,
                 types: pokemonResponse.data.types.map(type => type.type.name),
@@ -137,8 +152,8 @@ const Pokedex = () => {
         const abilityResults = await Promise.all(abilityFetches);
 
         return abilityResults.map(result => ({
-            name: result.data.name,
-            effect: result.data.effect_entries.find(entry => entry.language.name === 'en')?.effect,
+            name: result.data.names.find(name => name.language.name === language)?.name || result.data.name,
+            effect: result.data.effect_entries.find(entry => entry.language.name === language)?.effect,
         }));
     }
 
@@ -152,7 +167,15 @@ const Pokedex = () => {
     }
 
     return (
-        <div className="flex flex-wrap justify-center gap-4">
+        <div className="flex flex-wrap justify-center items-center p-4 gap-4 relative overflow-y-auto w-full">
+            <select
+                value={language}
+                onChange={(e) => setLanguage(e.target.value)}
+                className="absolute top-2 right-2 p-2 rounded-md bg-gray-200 text-dark">
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="es">Español</option>
+            </select>
             {loading ? <Loader/> : pokemons.map((pokemon, index) => (
                 <Card
                     key={index}
